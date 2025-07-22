@@ -1,7 +1,6 @@
 from fastapi import FastAPI
+from .routes.auth_routes import router as auth_router
 
 app = FastAPI()
 
-@app.get("/")
-def read_root():
-    return {"message": "Hello, mini webshop API is running!"}
+app.include_router(auth_router)
