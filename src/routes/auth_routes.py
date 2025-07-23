@@ -49,8 +49,8 @@ def logout(response: Response, access_token : str = Cookie(None), refresh_token 
 
 
 @router.get("/me")
-def me(access_token : str = Cookie(None), service: AuthService = Depends(get_auth_service)) :
-    response = service.me(access_token)
+def me(access_token : str = Cookie(None), refresh_token : str = Cookie(None), service: AuthService = Depends(get_auth_service)) :
+    response = service.me(access_token, refresh_token)
     
     return {'user': response}
 

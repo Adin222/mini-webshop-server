@@ -11,5 +11,6 @@ class UserResponse(BaseModel):
     name: str
     username: str
     email: str
+    is_auth: bool
 
     model_config = ConfigDict(from_attributes=True)

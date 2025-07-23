@@ -41,22 +41,26 @@ class AuthService :
         
         self.repo.delete_token(refresh_token)
 
-    def me(self, access_token : str) -> UserResponse :
+    def me(self, access_token : str, refresh_token: str) -> UserResponse :
+        if access_token is None and refresh_token is None:
+            return UserResponse(id=0, name="Guest", username="guest123", email="template", is_auth=False)
+
         if access_token is None:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="You are logged out")
         
         payload = AuthUtil.decode_access_token(access_token)
 
-        response = UserResponse(id=payload['id'], name=payload['name'], username=payload['username'], email=payload['email'])
+        response = UserResponse(id=payload['id'], name=payload['name'], username=payload['username'], email=payload['email'], is_auth=True)
 
         return response
         
     def refresh(self, access_token : str, refresh_token: str) -> str:
+        if refresh_token is None :
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="You are logged out")
+
         if access_token :
             raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Cannot refresh")
         
-        if refresh_token is None :
-            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="You are logged out")
         
         token = self.repo.get_refresh_token(refresh_token)
 
