@@ -7,8 +7,8 @@ class ProductType(enum.Enum):
     technology = "technology"
     clothing = "clothing"
     accessories = "accessories"
-    beauty = "beauty"
-    sports = "sports"
+    tools = "tools"
+
 
 class Product(Base):
     __tablename__ = "products"
@@ -20,6 +20,7 @@ class Product(Base):
     image_url = Column(String, nullable=False)
     quantity = Column(Integer, nullable=False)
     product_type = Column(Enum(ProductType), nullable=False)
+    product_sub_type = Column(String(35), nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     order_items = relationship("OrderItem", back_populates="product")
     cart_items = relationship("CartItem", back_populates="product")

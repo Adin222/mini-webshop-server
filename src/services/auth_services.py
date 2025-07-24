@@ -16,6 +16,9 @@ class AuthService :
     def login(self, login_data: UserLogin, access_token: str) -> dict :
         if access_token is not None:
             raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Already logged in")
+        
+        if login_data.username is None or login_data.password is None :
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, details="Fields cannot be empty")
 
         user = self.repo.get_user_by_username(login_data.username)
 
