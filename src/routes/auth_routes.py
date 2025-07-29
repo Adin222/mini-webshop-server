@@ -22,17 +22,26 @@ def login(login_data: UserLogin, response: Response, access_token: str = Cookie(
         key="access_token",
         value=tokens['access_token'],
         httponly=True,
-        secure=ENVIRONMENT=="production",      
-        samesite="lax",  
+        secure=True,      
+        samesite="None",  
         max_age=600   
+    )
+
+    response.set_cookie(
+        key="csrftoken",
+        value=tokens['csrf_token'],
+        httponly=True,
+        secure=True,      
+        samesite="None",  
+        max_age=864000   
     )
 
     response.set_cookie(
         key="refresh_token",
         value=tokens['refresh_token'],
         httponly=True,
-        secure=ENVIRONMENT=="production",      
-        samesite="lax",  
+        secure=True,      
+        samesite="None",  
         max_age=864000   
     )
 
@@ -64,7 +73,7 @@ def refresh(response: Response, access_token: str = Cookie(None), refresh_token:
         value=token['access_token'],
         httponly=True,
         secure=ENVIRONMENT=="production",      
-        samesite="lax",  
+        samesite="None",  
         max_age=600   
     )
 

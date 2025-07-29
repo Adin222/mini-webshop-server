@@ -33,9 +33,11 @@ class AuthService :
         token = secrets.token_urlsafe(64)
         refresh_token = RefreshToken(token=token, user_id=user.id, expires_at=expires_at)
 
+        csrf_token = secrets.token_urlsafe(64)
+
         self.repo.save_token(refresh_token)
 
-        return {'access_token': access_token, 'refresh_token': refresh_token.token}
+        return {'access_token': access_token, 'refresh_token': refresh_token.token, 'csrf_token': csrf_token}
     
 
     def logout(self, access_token: str, refresh_token: str) :
