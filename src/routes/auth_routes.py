@@ -72,7 +72,7 @@ def refresh(response: Response, access_token: str = Cookie(None), refresh_token:
         key="access_token",
         value=token['access_token'],
         httponly=True,
-        secure=ENVIRONMENT=="production",      
+        secure=True,      
         samesite="None",  
         max_age=600   
     )
