@@ -37,8 +37,15 @@ class ProductService :
         self.repo.save_product(product)
     
     def get_product_by_id(self, id: int) -> ProductInfo :
+
+        if not isinstance(id, int):
+            return {}
         
         product = self.repo.get_product_by_id(id)
+
+        if product is None :
+            return {}
+
 
         response_data = ProductInfo(
             id=product.id,

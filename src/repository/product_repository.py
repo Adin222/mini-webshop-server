@@ -20,6 +20,8 @@ class ProductRepository :
     def get_all_products(self, product_name: str = None, min_price: float = None, max_price: float = None, quantity: int = None, sort: str = "desc"):
         query = self.db.query(Product)
 
+        query = query.filter(Product.quantity > 0)
+
         if product_name:
          query = query.filter(Product.product_name.ilike(f"%{product_name}%"))
 
