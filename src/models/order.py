@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Enum, DateTime, Numeric, func, ForeignKey
+from sqlalchemy import Column, Integer, String, Enum, DateTime, Boolean, func, ForeignKey
 from sqlalchemy.orm import relationship
 from database import Base
 import enum
@@ -18,6 +18,7 @@ class Order(Base):
     buyer_phone_number = Column(String(50), nullable=True)
     buyer_email = Column(String(50), nullable=True)
     status = Column(Enum(OrderStatus), default=OrderStatus.pending, nullable=False)
+    finished = Column(Boolean, default=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     items = relationship("OrderItem", back_populates="order", cascade="all, delete-orphan")
 

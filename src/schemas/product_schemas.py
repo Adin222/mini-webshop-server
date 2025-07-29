@@ -24,3 +24,10 @@ class ProductInfo(BaseModel):
     model_config = {
         "from_attributes": True
     }
+
+class ProductUpdate(BaseModel):
+    product_name: str
+    description: str
+    price: float
+    image_url: str
+    quantity: int

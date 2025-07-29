@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Query, Depends
 from sqlalchemy.orm import Session
 from ..auth.dependencies import require_authentication
-from ..schemas.product_schemas import ProductData
+from ..schemas.product_schemas import ProductData, ProductUpdate
 
 from database import get_db
 from ..repository.product_repository import ProductRepository
@@ -42,3 +42,15 @@ def get_product(id: int, service: ProductService = Depends(get_product_service))
     response = service.get_product_by_id(id)
 
     return {'product': response}
+
+@router.patch('/product/{id}')
+def update_product(id: int, product_data: ProductUpdate, service: ProductService = Depends(get_product_service)):
+    response = service.update_product_data(product_data, id)
+
+    return response
+
+@router.delete('/product/{id}')
+def soft_delete_project(id: int, service: ProductService = Depends(get_product_service)):
+    response = service.soft_delete_product(id)
+
+    return response

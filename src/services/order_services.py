@@ -5,7 +5,7 @@ from ..repository.product_repository import ProductRepository
 from ..repository.user_repository import UserRepository
 from ..schemas.order_schemas import OrderCreation
 from ..utils.order_util import OrderUtil
-from ..models.order import Order, OrderItem
+from ..models.order import Order, OrderItem, OrderStatus
 
 
 class OrderService:
@@ -103,6 +103,66 @@ class OrderService:
                 "created_at": order.created_at,
                 "status": order.status.value,
                 "total_price": total_price,
+                "finished": order.finished
             })
 
         return results, total_orders
+    
+    def get_order_details(self, id: int):
+        order = self.order_repo.get_order_by_id(id)
+
+        if order is None:
+            HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="order doesn't exist")
+
+        detailed_items = []
+        order_total = 0
+        for item in order.items:
+            product = self.prod_repo.get_product_by_id(item.product_id)
+
+            if product is None:
+                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="product doesn't exist")
+            
+            order_total += (product.price * item.quantity)
+            detailed_items.append({
+                "product_id": product.id,
+                "quantity": item.quantity,
+                "image": product.image_url,
+                "price": product.price,
+                "name": product.product_name
+            })
+
+        return {
+                "order_id": order.id,
+                "order_total": order_total,
+                "items": detailed_items
+        }
+    
+    def update_order_status(self, id: int, status: str):
+        if status is None:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="status doesn't exist")
+
+        order = self.order_repo.get_order_by_id_simple(id)
+
+        if order is None: 
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="order doesn't exist")
+        
+        if status != "accepted" and status != "rejected" and status != "finished":
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Invalid status")
+        
+        if status == "accepted" or status == "rejected":
+            order.status = OrderStatus(status)
+
+        if status == "finished":
+            order.finished = True
+
+        self.order_repo.save_order(order)
+
+        return "Successfully changed status"
+        
+
+
+
+
+
+        
+

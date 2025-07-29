@@ -1,6 +1,6 @@
 from fastapi import HTTPException, status
 from ..repository.product_repository import ProductRepository
-from ..schemas.product_schemas import ProductData, ProductInfo
+from ..schemas.product_schemas import ProductData, ProductInfo, ProductUpdate
 from ..models.product import Product, ProductType
 
 
@@ -78,4 +78,48 @@ class ProductService :
         quantity=quantity,
         sort=sort
        )
+    
+
+    def update_product_data(self, product_data: ProductUpdate, id: int):
+        product = self.repo.get_product_by_id(id)
+
+        if product is None:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Product is not found")
+
+        if product_data.product_name != "" and product_data.product_name != product.product_name:
+            product.product_name = product_data.product_name
+
+        if product_data.description != "" and product_data.description != product.description:
+            product.description = product_data.description
+
+        if product_data.price > 0 and product_data.price != product.price:
+            product.price = product_data.price
+
+        if product_data.quantity > 0 and product_data.quantity != product.quantity:
+            product.quantity = product_data.quantity
+
+        if product_data.image_url != "" and product_data.image_url != product.image_url:
+            product.image_url = product_data.image_url
+
+        self.repo.save_product(product)
+
+        return "successfully updated"
+    
+    
+    def soft_delete_product(self, id: int):
+        product = self.repo.get_product_by_id(id)
+
+        if product is None:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Product is not found")
+        
+        product.quantity = 0
+
+        self.repo.save_product(product)
+
+        return "Product has been soft deleted"
+
+        
+
+
+
 

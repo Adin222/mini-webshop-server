@@ -8,3 +8,6 @@ class OrderCreation(BaseModel):
     phone: str
     address: str
     email: Optional[str] = None
+
+class StatusUpdate(BaseModel):
+    status: str

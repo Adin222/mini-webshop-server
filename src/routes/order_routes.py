@@ -6,7 +6,7 @@ from ..repository.cart_repository import CartRepository
 from ..repository.product_repository import ProductRepository
 from ..repository.user_repository import UserRepository
 from ..services.order_services import OrderService
-from ..schemas.order_schemas import OrderCreation
+from ..schemas.order_schemas import OrderCreation, StatusUpdate
 
 router = APIRouter(prefix="/api", tags=["Order"])
 
@@ -42,3 +42,15 @@ def list_orders(
         "total_orders": total,
         "orders": orders
     }
+
+@router.get("/order/{id}")
+def get_order_items(id: int, service: OrderService = Depends(get_order_service)):
+    response = service.get_order_details(id)
+
+    return response
+
+@router.patch("/status/order/{id}")
+def change_order_status(id: int, body: StatusUpdate, service: OrderService = Depends(get_order_service)):
+    response = service.update_order_status(id, body.status)
+
+    return response

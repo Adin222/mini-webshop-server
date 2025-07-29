@@ -1,4 +1,4 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from sqlalchemy import asc, desc
 from ..models.order import Order
 
@@ -14,6 +14,12 @@ class OrderRepository:
         self.db.commit()
 
     def get_order_by_id(self, id: int) -> Order:
+        return (self.db.query(Order)
+         .options(joinedload(Order.items))  
+         .filter(Order.id == id)
+         .first())
+    
+    def get_order_by_id_simple(self, id: int) -> Order:
         return self.db.query(Order).filter(Order.id == id).first()
     
     def get_orders_query(self, sort_asc: bool = True):
