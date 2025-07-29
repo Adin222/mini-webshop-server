@@ -7,14 +7,14 @@ app = FastAPI()
 origins = [
     "http://localhost:5173", 
     "http://127.0.0.1:5173",
-    "https://teal-capybara-64ab22.netlify.app/"
+    "https://teal-capybara-64ab22.netlify.app"
 ]
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,         
     allow_credentials=True,       
-    allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE"],  
+    allow_methods=["*"],  
     allow_headers=["*"],           
 )
 
