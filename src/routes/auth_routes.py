@@ -51,8 +51,20 @@ def login(login_data: UserLogin, response: Response, access_token: str = Cookie(
 def logout(response: Response, access_token : str = Cookie(None), refresh_token : str = Cookie(None), service: AuthService = Depends(get_auth_service)):
     service.logout(access_token, refresh_token)
 
-    response.delete_cookie('refresh_token')
-    response.delete_cookie('access_token')
+    response.delete_cookie(
+    key="access_token",
+    path="/",
+    samesite="None",
+    secure=True
+    )
+    
+    response.delete_cookie(
+    key="refresh_token",
+    path="/",
+    samesite="None",
+    secure=True
+    )
+
 
     return {'message': 'Successfully logged out'}
 
