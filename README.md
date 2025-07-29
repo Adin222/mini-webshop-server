@@ -2,6 +2,13 @@
 
 If the app doesn't start immediately, it's because the server is hosted on Render's free tier it may take 15 to 50 seconds to wake up from sleep. Wait or reload the window
 
+# Log in information (deployed app)
+
+```text
+username= admin130
+password= Lozink@33
+```
+
 # How to run app localy
 Make sure you have Python installed.
 
