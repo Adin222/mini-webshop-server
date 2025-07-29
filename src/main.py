@@ -7,7 +7,7 @@ app = FastAPI()
 origins = [
     "http://localhost:5173", 
     "http://127.0.0.1:5173",
-    "https://papaya-squirrel-d752e0.netlify.app"
+    "https://clinquant-hotteok-2e9352.netlify.app"
 ]
 
 app.add_middleware(
