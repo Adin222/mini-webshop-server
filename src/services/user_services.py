@@ -1,6 +1,6 @@
 from fastapi import HTTPException, status
 from ..repository.user_repository import UserRepository
-from ..schemas.user_schemas import LoggedUser, UpdateLoggedUser
+from ..schemas.user_schemas import LoggedUser, UpdateLoggedUser, RegisterUser
 from ..utils.auth_util import AuthUtil
 from ..utils.user_utils import UserUtil
 from ..models.user import User
@@ -67,5 +67,22 @@ class UserService:
         self.repo.save_user(db_user)
 
         return {'message': 'user updated successfully'}
+    
+    def register_admin(self, register_data: RegisterUser):
+        if register_data.email == "":
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email required")
+        
+        if register_data.username == "":
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Username required")
+        
+        if register_data.password == "":
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Password required")
+        
+        hash_password=AuthUtil.hash_password(register_data.password)
+        
+        user = User(username=register_data.username, name="John Doe", email=register_data.email, hash_password=hash_password)
 
+        self.repo.save_user(user)
+
+        return "User successfully created"
 

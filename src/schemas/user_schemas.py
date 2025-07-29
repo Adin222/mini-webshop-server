@@ -13,4 +13,9 @@ class UpdateLoggedUser(BaseModel) :
     username: Optional[str] = None
     password: Optional[str] = None
     email: Optional[str] = None  
+
+class RegisterUser(BaseModel):
+    username: str
+    email: str
+    password: str
     
