@@ -15,7 +15,7 @@ def get_cart_service(db: Session = Depends(get_db)) -> CartService :
 
 @router.post("/add-item")
 def add_item_to_cart(request: Request, item_data: CartItemData, service: CartService = Depends(get_cart_service)):
-    session_id = request.cookies.get("session_id")
+    session_id = request.headers.get("x-session-id")
 
     added_item = service.add_item_to_cart(session_id, item_data)
     return {"message": "Item added to cart", "item": {
@@ -25,7 +25,7 @@ def add_item_to_cart(request: Request, item_data: CartItemData, service: CartSer
 
 @router.get("/get-items")
 def get_cart_data(request: Request, service: CartService = Depends(get_cart_service)):
-    session_id = request.cookies.get("session_id")
+    session_id = request.headers.get("x-session-id")
 
     cart_items = service.get_cart_data(session_id)
 
@@ -33,7 +33,7 @@ def get_cart_data(request: Request, service: CartService = Depends(get_cart_serv
 
 @router.delete("/remove-item/{id}")
 def remove_cart_item(id: int, request: Request, service: CartService = Depends(get_cart_service)):
-    session_id = request.cookies.get("session_id")
+    session_id = request.headers.get("x-session-id")
 
     response = service.remove_cart_item(id, session_id)
 

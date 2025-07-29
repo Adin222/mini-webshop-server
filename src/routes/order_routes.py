@@ -20,7 +20,7 @@ def get_order_service(db: Session = Depends(get_db)) -> OrderService :
 
 @router.post('/create-order')
 def create_order(order_data: OrderCreation, request: Request, services: OrderService = Depends(get_order_service)):
-    session_id = request.cookies.get('session_id')
+    session_id = request.headers.get("x-session-id")
 
     response = services.create_order(session_id, order_data)
 
