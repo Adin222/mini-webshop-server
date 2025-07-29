@@ -39,6 +39,8 @@ pip install -r requirements.txt
 
 # Optional: Fixing Import Issues in VS Code
 
+## Use this step only if you encounter import issues
+
 Run this command to find the exact path to your Python interpreter:
 
 ```bash
