@@ -8,13 +8,13 @@ from ..services.cart_services import CartService
 
 router = APIRouter(prefix="/api", tags=["Cart"])
 
-def get_auth_service(db: Session = Depends(get_db)) -> CartService :
+def get_cart_service(db: Session = Depends(get_db)) -> CartService :
     repo = CartRepository(db)
     product_repo = ProductRepository(db)
     return CartService(repo, product_repo) 
 
 @router.post("/add-item")
-def add_item_to_cart(request: Request, item_data: CartItemData, service: CartService = Depends(get_auth_service)):
+def add_item_to_cart(request: Request, item_data: CartItemData, service: CartService = Depends(get_cart_service)):
     session_id = request.cookies.get("session_id")
 
     added_item = service.add_item_to_cart(session_id, item_data)
@@ -24,7 +24,7 @@ def add_item_to_cart(request: Request, item_data: CartItemData, service: CartSer
     }}
 
 @router.get("/get-items")
-def get_cart_data(request: Request, service: CartService = Depends(get_auth_service)):
+def get_cart_data(request: Request, service: CartService = Depends(get_cart_service)):
     session_id = request.cookies.get("session_id")
 
     cart_items = service.get_cart_data(session_id)
@@ -32,7 +32,7 @@ def get_cart_data(request: Request, service: CartService = Depends(get_auth_serv
     return cart_items
 
 @router.delete("/remove-item/{id}")
-def remove_cart_item(id: int, request: Request, service: CartService = Depends(get_auth_service)):
+def remove_cart_item(id: int, request: Request, service: CartService = Depends(get_cart_service)):
     session_id = request.cookies.get("session_id")
 
     response = service.remove_cart_item(id, session_id)
@@ -40,7 +40,7 @@ def remove_cart_item(id: int, request: Request, service: CartService = Depends(g
     return response
 
 @router.patch("/cart/{action}")
-def increase_decrease_quantity(action: str, cart_item: CartAction, service: CartService = Depends(get_auth_service)):
+def increase_decrease_quantity(action: str, cart_item: CartAction, service: CartService = Depends(get_cart_service)):
     response = service.increase_decrease_quantity(cart_item, action)
 
     return response
