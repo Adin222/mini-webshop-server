@@ -1,6 +1,6 @@
 # Important information
 
-If the app doesn't start immediately, it's because the server is hosted on Render's free tier it may take 15 to 50 seconds to wake up from sleep. Wait or reload the window
+If the app doesn't start immediately, it's because the server is hosted on Render's free tier it may take 15 to 50 seconds to wake up from sleep. Wait or reload the window. When the client loads, refreshing works only on the root ('/') path. Reloading on any other path won’t work automatically you’ll need to manually redirect to the root path.
 
 # Log in information (deployed app)
 
