@@ -69,6 +69,9 @@ class AuthService :
         
         token = self.repo.get_refresh_token(refresh_token)
 
+        if token is None:
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Cannot refresh")
+
         if token.expires_at.replace(tzinfo=timezone.utc) < datetime.now(timezone.utc) :
             self.repo.delete_token(refresh_token)
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Refresh token expired")
